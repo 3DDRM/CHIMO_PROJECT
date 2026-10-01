@@ -1,7 +1,7 @@
 import pygame
 import constants
 import objects
-import time
+import enemy
 
 pygame.init()
 pygame.mixer.init()
@@ -29,8 +29,11 @@ walls =[
     objects.Wall(35, 480, 210, 20),
     objects.Wall(730, 100, 30, 150),
     objects.Wall(70, 135, 20, 20),
-    objects.Wall(750, 500, 30, 100)
+    objects.Wall(750, 500, 30, 100),
+    objects.Wall(25, 70, 20, 400)
 ]
+
+enemie1 = enemy.Enemy(300, 200, 50, 50, 20, 100)
 
 loocking_right = True
 clock = pygame.time.Clock()
@@ -78,11 +81,15 @@ while game:
         if player_rect.colliderect(i.rect):
             x = x_old
             y = y_old
-            break   
+            break
+
+    enemie1.update(walls)
 
     window.fill((0,0,0))
     window.blit(background, (0, 0))               
     window.blit(player, (x,y))
+
+    enemie1.draw(window)
 
     pygame.display.update()
 
