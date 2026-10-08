@@ -1,4 +1,5 @@
-import pygame 
+import pygame
+
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, x, y, width, height, speed, health):
@@ -24,25 +25,13 @@ class Enemy(pygame.sprite.Sprite):
 
         if self.step == 1:
             if self.timer >= self.tick:
-                self.rect.x += self.speed
+                self.rect.x-= self.speed
                 self.timer = 0
                 self.step = 2
-
+                
         if self.step == 2:
             if self.timer >= self.tick:
-                self.rect.y += self.speed
-                self.timer = 0
-                self.step = 3
-                
-        if self.step == 3:
-            if self.timer >= self.tick:
-                self.rect.x -= self.speed
-                self.timer = 0
-                self.step = 4
-                
-        if self.step == 4:
-            if self.timer >= self.tick:
-                self.rect.y -= self.speed
+                self.rect.x+= self.speed
                 self.timer = 0
                 self.step = 1
                 
@@ -51,7 +40,3 @@ class Enemy(pygame.sprite.Sprite):
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
-
-
-
-

@@ -2,6 +2,8 @@ import pygame
 import constants
 import objects
 import enemy
+import enemy2
+import enemy3
 
 pygame.init()
 pygame.mixer.init()
@@ -34,6 +36,8 @@ walls =[
 ]
 
 enemie1 = enemy.Enemy(100, 200, 50, 80, 100, 2)
+enemie2 = enemy2.Enemy(400,400,50, 80, 100, 2)
+enemie3 = enemy3.Enemy(500, 150, 50, 80, 100, 2)
 
 loocking_right = True
 clock = pygame.time.Clock()
@@ -83,13 +87,17 @@ while game:
             y = y_old
             break
 
-    enemie1.update(walls)
+    enemie1.update()
+    enemie2.update()
+    enemie3.update()
 
     window.fill((0,0,0))
     window.blit(background, (0, 0))               
     window.blit(player, (x,y))
 
     enemie1.draw(window)
+    enemie2.draw(window)
+    enemie3.draw(window)
 
     pygame.display.update()
 
