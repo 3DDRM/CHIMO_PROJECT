@@ -9,7 +9,7 @@ class Enemy(pygame.sprite.Sprite):
         self.height = height
         self.speed = speed
         self.health = health
-        self.moving = True
+        self.step = 1
         self.timer = 0
         self.tick = 60
 
@@ -24,17 +24,29 @@ class Enemy(pygame.sprite.Sprite):
         x_old = self.rect.x
         self.timer += 1
 
-        if self.moving:
+        if self.step == 1:
             if self.timer >= self.tick:
                 self.rect.x += self.speed
                 self.timer = 0
-                self.moving = False
+                self.step = 2
 
-        if not self.moving:
+        if self.step == 2:
             if self.timer >= self.tick:
                 self.rect.y += self.speed
                 self.timer = 0
-                self.moving = True
+                self.step = 3
+                
+        if self.step == 3:
+            if self.timer >= self.tick:
+                self.rect.x -= self.speed
+                self.timer = 0
+                self.step = 4
+                
+        if self.step == 4:
+            if self.timer >= self.tick:
+                self.rect.y -= self.speed
+                self.timer = 0
+                self.step = 1
 
 
     def draw(self, surface):

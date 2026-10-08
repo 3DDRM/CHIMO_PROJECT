@@ -16,7 +16,7 @@ music = pygame.mixer.music.play(-1)
 player = pygame.image.load('assets//images//characters//player//walk_0.png').convert_alpha()
 background = pygame.image.load('assets//images//backgrounds//Stage_1.png').convert()
 
-player = pygame.transform.scale(player, (100, 110))
+player = pygame.transform.scale(player, (90, 110))
 background = pygame.transform.scale(background, (constants.STAGE_WIDTH, constants.STAGE_HEIGHT))
 
 player_width = player.get_width()
@@ -33,7 +33,7 @@ walls =[
     objects.Wall(25, 70, 20, 400)
 ]
 
-enemie1 = enemy.Enemy(300, 200, 50, 50, 20, 100)
+enemie1 = enemy.Enemy(100, 200, 50, 80, 100, 2)
 
 loocking_right = True
 clock = pygame.time.Clock()
