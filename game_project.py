@@ -4,6 +4,8 @@ import objects
 import enemy
 import enemy2
 import enemy3
+import character
+import weapon
 
 pygame.init()
 pygame.mixer.init()
@@ -11,33 +13,42 @@ window = pygame.display.set_mode((constants.DISPLAY_WIDTH, constants.DISPLAY_HEI
 pygame.display.set_caption('CHIMO ADVENTURE SUPREME')
 window.fill((0,0,0))
 
-music = pygame.mixer.music.load('assets//songs//More.mp3')
+music = pygame.mixer.music.load('assets//songs//practice_mode.mp3')
 music = pygame.mixer.music.play(-1)
 
+x = 500
+y = 300
 
-player = pygame.image.load('assets//images//characters//player//walk_0.png').convert_alpha()
+player_image = pygame.image.load('assets//images//characters//player//shovel_knight.png').convert_alpha()
 background = pygame.image.load('assets//images//backgrounds//Stage_1.png').convert()
 
-player = pygame.transform.scale(player, (90, 110))
+player_image = pygame.transform.scale(player_image, (70, 70))
 background = pygame.transform.scale(background, (constants.STAGE_WIDTH, constants.STAGE_HEIGHT))
 
-player_width = player.get_width()
-player_height = player.get_height()
+player = character.Character(x, y, player_image,  100, 80)
 
-x = 350
-y = 250
+#player_width = player.shape.width
+#player_height = player.shape.height
 
 walls =[
-    objects.Wall(35, 480, 210, 20),
-    objects.Wall(730, 100, 30, 150),
-    objects.Wall(70, 135, 20, 20),
-    objects.Wall(750, 500, 30, 100),
-    objects.Wall(25, 70, 20, 400)
+    objects.Wall(55, 460, 210, 90),
+    objects.Wall(730, 120, 30, 150),
+    objects.Wall(60, 135, 40, 40),
+    objects.Wall(735, 480, 60, 110)
 ]
 
-enemie1 = enemy.Enemy(100, 200, 50, 80, 100, 2)
-enemie2 = enemy2.Enemy(400,400,50, 80, 100, 2)
-enemie3 = enemy3.Enemy(500, 150, 50, 80, 100, 2)
+enemy_image = pygame.image.load('assets//images//characters//enemy//rat_sprite.png').convert_alpha()
+enemy_image_two = pygame.image.load('assets//images//characters//enemy//rat_invert.png').convert_alpha()
+gun_image = pygame.image.load('assets//images//weapons//torchic.webp').convert_alpha()
+
+enemie1 = enemy.Enemy(100, 200, enemy_image, 140, 70, 100, 2)
+enemie2 = enemy2.Enemy(400, 400, enemy_image, 140, 70, 100, 2)
+enemie3 = enemy3.Enemy(480, 150, enemy_image_two, 140, 70, 100, 2)
+
+gun = weapon.Weapon(gun_image, 50, 50)
+
+text = pygame.font.Font(None, 60)
+text_image = text.render('Score:', True, (0, 0, 0))
 
 loocking_right = True
 clock = pygame.time.Clock()
@@ -49,55 +60,64 @@ while game:
             game = False
     pressed = pygame.key.get_pressed()
 
-    x_old = x
-    y_old = y
+    delta_x = 0
+    delta_y = 0
 
     if pressed[pygame.K_w]:
-        y -= constants.SPEED
+        delta_y -= constants.SPEED
+        player.movement(0, delta_y)
     if pressed[pygame.K_s]:
-        y += constants.SPEED
+        delta_y += constants.SPEED
+        player.movement(0, delta_y)
     if pressed[pygame.K_d]:
-        x += constants.SPEED
+        delta_x += constants.SPEED
+        player.movement(delta_x, 0)
         if loocking_right:
-            player = pygame.transform.flip(player, True, False)
+            player.image = pygame.transform.flip(player.image, True, False)
             loocking_right = False
     if pressed[pygame.K_a]:
-        x -= constants.SPEED
+        delta_x -= constants.SPEED
+        player.movement(delta_x, 0)
         if not loocking_right:
-            player = pygame.transform.flip(player, True, False)
+            player.image = pygame.transform.flip(player.image, True, False)
             loocking_right = True
 
-    if x > (window.get_width() - player_width - 10):
-        x = window.get_width() - player_width - 10
+    if player.shape.x > (window.get_width() - player.shape.width - 15):
+        player.shape.x = window.get_width() - player.shape.width - 15
 
-    if x < constants.EDGE:
-        x = constants.EDGE
+    if player.shape.x < 50:
+        player.shape.x = 50
 
-    if y > (window.get_height() - player_height - constants.EDGE):
-        y = window.get_height() - player_height - constants.EDGE
+    if player.shape.y > (window.get_height() - player.shape.height - constants.EDGE):
+        player.shape.y = window.get_height() - player.shape.height - constants.EDGE
 
-    if y < 60:
-        y = 60
-
-    player_rect = pygame.Rect(x, y, player_width, player_height)
+    if player.shape.y < 85:
+        player.shape.y = 85
 
     for i in walls:
-        if player_rect.colliderect(i.rect):
-            x = x_old
-            y = y_old
+        if player.shape.colliderect(i.rect):
+            player.shape.x = player.shape.x - delta_x
+            player.shape.y = player.shape.y - delta_y
             break
 
     enemie1.update()
     enemie2.update()
     enemie3.update()
+    gun.update(player)
 
     window.fill((0,0,0))
-    window.blit(background, (0, 0))               
-    window.blit(player, (x,y))
+    window.blit(background, (0, 0))
+    window.blit(text_image, (20, 20))               
+    #window.blit(player_image, (x, y))
 
     enemie1.draw(window)
     enemie2.draw(window)
     enemie3.draw(window)
+    player.draw(window)
+    gun.draw(window)
+
+    #for wall in walls:
+        #pygame.draw.rect(window, (255, 0, 0), wall.rect)
 
     pygame.display.update()
 

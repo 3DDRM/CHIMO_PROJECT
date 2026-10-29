@@ -1,8 +1,10 @@
 import pygame 
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, x, y, width, height, speed, health):
+    def __init__(self, x, y, image, width, height, speed, health):
         super().__init__()
+        self.image = image
+        self.image = pygame.transform.scale(self.image, (width, height))
         self.width = width
         self.height = height
         self.speed = speed
@@ -10,9 +12,6 @@ class Enemy(pygame.sprite.Sprite):
         self.step = 1
         self.timer = 0
         self.tick = 60
-
-        self.image = pygame.Surface((width, height))
-        self.image.fill((255, 100, 0))
 
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -45,13 +44,6 @@ class Enemy(pygame.sprite.Sprite):
                 self.rect.y -= self.speed
                 self.timer = 0
                 self.step = 1
-                
-        self.rect = pygame.Rect(self.rect.x, self.rect.y, self.width, self.height)
-
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
-
-
-
-
