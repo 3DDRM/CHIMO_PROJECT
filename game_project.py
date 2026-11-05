@@ -38,6 +38,8 @@ walls =[
     objects.Wall(705, 450, 80, 110)
 ]
 
+ammu = []
+
 enemy_image = pygame.image.load('assets//images//characters//enemy//rat_sprite.png').convert_alpha()
 enemy_image_two = pygame.image.load('assets//images//characters//enemy//rat_invert.png').convert_alpha()
 gun_image = pygame.image.load('assets//images//weapons//torchic.webp').convert_alpha()
@@ -48,7 +50,6 @@ enemie2 = enemy2.Enemy(400, 400, enemy_image, 140, 70, 100, 2)
 enemie3 = enemy3.Enemy(480, 150, enemy_image_two, 140, 70, 100, 2)
 
 gun = weapon.Weapon(gun_image, 50, 50)
-shot = bullet.Bullet(gun, shot_image, 15, 50, 50)
 
 text = pygame.font.Font(None, 60)
 text_image = text.render('Score:', True, (0, 0, 0))
@@ -89,9 +90,9 @@ while game:
             loocking_right = True
 
     if pressed[pygame.K_SPACE]:
-        gun.update(player)
-        shot.update()
-
+        new_bullet = bullet.Bullet(gun, shot_image, 15, 50, 50)
+        ammu.append(new_bullet)       
+        
     if player.shape.x > (window.get_width() - player.shape.width - 40):
         player.shape.x = window.get_width() - player.shape.width - 40
 
@@ -124,6 +125,12 @@ while game:
     enemie3.draw(window)
     player.draw(window)
     gun.draw(window)
+
+    for i in ammu:
+        i.update()
+        
+    for i in ammu:
+        i.draw(window)
 
     #for wall in walls:
         #pygame.draw.rect(window, (255, 0, 0), wall.rect)
